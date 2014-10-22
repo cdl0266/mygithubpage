@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<title>twitchy</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+		<link href="css/main.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+
+		<div id="refresh" data-bind="click: refresh">
+			<i class="icon-arrows"></i>
+		</div>
+
+		<div class="container">
+			<header class="logo">
+				twitchy
+			</header>
+
+			<div class="nav-wrapper">
+				<nav class="main">
+					<!-- ko foreach: tabs -->
+						<div data-bind="text: $data,
+							css: $root.navLinkCss($data, $index()),
+							click: $root.goToTab"></div>
+					<!-- /ko -->
+					<div class="active-border"></div>
+				</nav>
+			</div>
+
+			<section class="content">
+				<ul class="horizontal" data-bind="foreach: listSubTabs">
+					<li data-bind="text: $data,
+						css: $root.subNavLinkCss($data),
+						click: $root.goToSubTab"></li>
+				</ul>
+
+				<!-- ko with: streamList -->
+					<div class="stream-list">
+					<!-- ko foreach: $root.streamList -->
+						<div data-bind="css: $root.streamItemCss($index()),
+							style: $root.streamItemStyle($data),
+							click: $root.goToStream">
+
+							<div data-bind="click: $root.favoriteStream,
+								css: $root.favoriteStreamCss($data)">
+								<i class="icon-favorite"></i>
+							</div>
+							<div class="stream-viewers" data-bind="text: viewers"></div>
+							<div class="stream-info">
+								<div class="stream-title" data-bind="text: channel.display_name"></div>
+								<div class="stream-details">playing <b data-bind="text: game"></b></div>
+							</div>
+
+						</div>
+					<!-- /ko -->
+					</div>
+				<!-- /ko -->
+
+				<!-- ko with: gameList -->
+					<div class="game-list">
+					<!-- ko foreach: $root.gameList -->
+						<div data-bind="css: $root.gameItemCss($index()),
+							style: $root.gameItemStyle($data, $index()),
+							click: $root.goToGame">
+
+							<div class="stream-viewers" data-bind="text: viewers"></div>
+							<div class="stream-info">
+								<div class="stream-title" data-bind="text: game.name"></div>
+								<div class="stream-details"><b data-bind="text: channels"></b> streamers</div>
+							</div>
+
+						</div>
+					<!-- /ko -->
+					</div>
+				<!-- /ko -->
+
+				<div data-bind="css: streamPlayerCss, with: currentStream">
+					<div class="close" data-bind="click: $root.closeStream">&times;</div>
+
+					<div class="video-wrapper">
+
+						<object type="application/x-shockwave-flash"
+										height="300"
+										width="300"
+										id="live_embed_player_flash"
+										bgcolor="#000000"
+										data-bind="attr: $root.streamObjectData($data)">
+							<param name="allowFullScreen" value="true" />
+							<param name="allowScriptAccess" value="always" />
+							<param name="allowNetworking" value="all" />
+							<param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" />
+							<param name="flashvars" data-bind="attr: $root.streamFlashVars($data)" />
+						</object>
+
+					</div>
+				</div>
+
+			</section>
+		</div>
+
+
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/knockout-3.2.0.min.js"></script>
+		<script src="js/sammy-0.7.6.min.js"></script>
+		<script src="js/js-storage.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>
